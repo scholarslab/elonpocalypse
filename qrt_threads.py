@@ -13,7 +13,7 @@ files = glob.glob(DIRECTORY+"/*.jsonl")
 
 i = 0
 while i<len(files):
-    if files[i].endswith("_conversations.jsonl") or files[i].endswith("_replycontexts.jsonl"):
+    if files[i].endswith("_conversations.jsonl") or files[i].endswith("_replycontexts.jsonl") or files[i].endswith("followers.jsonl") or files[i].endswith("following.jsonl"):
         files.pop(i)
     else:
         i+=1
@@ -36,21 +36,28 @@ if not os.path.exists(DIRECTORY+"/qrt/"):
     os.makedirs(DIRECTORY+"/qrt/")
 
 for file in files:
-    thread_id_path = DIRECTORY+"/qrt/"+file.split("/")[-1][:-6]+"_thread_ids.txt"
-    if os.path.exists(thread_id_path):
-        continue
+    qrt_thread_id_path = DIRECTORY+"/qrt/"+file.split("/")[-1][:-6]+"_qrt_thread_ids.txt"
+    qrt_reply_id_path = DIRECTORY+"/qrt/"+file.split("/")[-1][:-6]+"_reply_thread_ids.txt"
     tweets = []
     with open(file,"r") as infile:
         for line in infile:
             tweets.extend(json.loads(line)["data"])
 
     threads = []
+    replies = []
     for tweet in tweets:
         if is_top_level_not_rt(tweet):
             threads.append(tweet["id"])
+        elif not is_top_level(tweet):
+            replies.append(tweet["id"])
 
-    print(thread_id_path,len(threads))
-    outfile = open(thread_id_path,"w")
+    print(qrt_thread_id_path,len(threads))
+    outfile = open(qrt_thread_id_path,"w")
     for i in threads:
+        outfile.write("quotes_of_tweet_id:"+i+"\n")
+    outfile.close()
+    print(qrt_reply_id_path,len(replies))
+    outfile = open(qrt_reply_id_path,"w")
+    for i in replies:
         outfile.write("quotes_of_tweet_id:"+i+"\n")
     outfile.close()

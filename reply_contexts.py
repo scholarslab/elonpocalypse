@@ -13,7 +13,7 @@ files = glob.glob(DIRECTORY+"/*.jsonl")
 
 i = 0
 while i<len(files):
-    if files[i].endswith("_conversations.jsonl") or files[i].endswith("_replycontexts.jsonl"):
+    if files[i].endswith("_conversations.jsonl") or files[i].endswith("_replycontexts.jsonl") or files[i].endswith("followers.jsonl") or files[i].endswith("following.jsonl"):
         files.pop(i)
     else:
         i+=1
@@ -45,9 +45,14 @@ for file in files:
             tweets.extend(json.loads(line)["data"])
 
     threads = set()
+    self_threads = set()
     for tweet in tweets:
-        if not is_top_level(tweet):
+        if is_top_level(tweet):
+            self_threads.add(tweet["id"])
+    for tweet in tweets:
+        if not is_top_level(tweet) and tweet["conversation_id"] not in self_threads:
             threads.add(tweet["conversation_id"])
+    
 
     print(thread_id_path,len(threads))
     outfile = open(thread_id_path,"w")
