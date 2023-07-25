@@ -23,7 +23,7 @@ Due to a persistant and inconsistent bug with the Twitter API, sometimes you'll 
 
 5. Build reply conversation IDs for specified tweets .jsonl:
 
-`python3 replycontexts.py slab/scholarslab.jsonl`
+`python3 reply_contexts.py slab`
 
 6. Download reply conversations with twarc:
 
