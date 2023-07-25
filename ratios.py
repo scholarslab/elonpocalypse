@@ -1,7 +1,7 @@
 import json
 from collections import OrderedDict
 from operator import itemgetter
-
+import sys
 
 def isTopLevel(tweet):
    if "referenced_tweets" in tweet:
@@ -20,7 +20,12 @@ def isTopLevelNotRT(tweet):
 tweets = []
 ratio = {}
 liked = {}
-with open("molly/tweets.jsonl","r") as infile:
+
+TWEETSFILE = "molly/socialistdogmom.jsonl"
+if len(sys.argv)>1:
+    TWEETSFILE = sys.argv[1]
+
+with open(TWEETSFILE,"r") as infile:
    for line in infile:
       tweets.extend(json.loads(line)["data"])
 

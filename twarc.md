@@ -2,6 +2,9 @@
 
 Organize accounts by directory. Use Twarc to download timelines to <handle>.json. Limitations: account handles that end with "_conversations" or "_replycontexts" will confuse the baseline script.
 
+Due to a persistant and inconsistent bug with the Twitter API, sometimes you'll just get 503 errors back for no reason (check the twarc.log). If that happens, add the "--max-results 100" option to make things go 5 times slower and it seems to work again.
+
+
 1. Download full timeline using search if on Academic, otherwise omit "--use-search" parameter to download most recent ~3k tweets:
 
 `twarc2 timeline --use-search "scholarslab" slab/scholarslab.jsonl`
@@ -38,3 +41,8 @@ Organize accounts by directory. Use Twarc to download timelines to <handle>.json
 
 `twarc2 followers scholarslab slab/scholarslab/followers.jsonl; twarc2 following scholarslab slab/scholarslab/following.jsonl`
 
+10. Mentions, either all mentions or excluding retweets.
+
+`twarc2 search --archive --no-context-annotations "@scholarslab" slab/mentions/mentions_all.jsonl`
+
+`twarc2 search --archive --no-context-annotations "@scholarslab -is:retweet" slab/mentions/mentions_no_rt.jsonl`
